@@ -116,22 +116,25 @@ namespace Sisterly_v1
             return posts;
         }
 
-        public List<Skill> GetSkills(int id)
+        public List<String> GetSkills(int id)
         {
-            var posts = new List<Skill>();
-            dynamic myposts = (from users in sisterlyDataContext.RegUsers
+            var posts = new List<String>();
+            dynamic myposts = from users in sisterlyDataContext.RegUsers
                                join myskills in sisterlyDataContext.SkillUsers
-                               on users.ID equals myskills.SkillID
+                               on users.ID equals myskills.UserID
                                select new
                                {
                                    Skillname = myskills.Skill.SkillName,
-                                   name = users.UserName
+                                 
                                };
 
-            foreach (var ownerAndPet in query)
+            foreach (var skills in myposts)
             {
-                Console.WriteLine($"\"{ownerAndPet.PetName}\" is owned by {ownerAndPet.OwnerName}");
+                posts.Add(skills.Skillname);
             }
+
+            return posts;
+
         }
 
         public RegUser getUser(int id)
@@ -230,6 +233,7 @@ namespace Sisterly_v1
                 };
                 sisterlyDataContext.SkillUsers.InsertOnSubmit(newsu);
                 try
+
                 {
                     sisterlyDataContext.SubmitChanges();
                     return true;

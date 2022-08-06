@@ -46,7 +46,7 @@ namespace Sisterly_v1
         RegUser getUser(int id);
 
         [OperationContract]
-        List<Skill> GetSkills(int id);
+        List<String> GetSkills(int id);
 
 
 
