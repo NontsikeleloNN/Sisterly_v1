@@ -34,7 +34,7 @@ namespace Sisterly_v1
         bool MakeRequest(int userid, int projectid);
 
         [OperationContract]
-        bool AcceptRequest(int reqID, int user);
+        bool AcceptRequest(int reqID);
 
         [OperationContract]
         bool CreatePost(int userID, string title, string image, int likes);

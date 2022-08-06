@@ -14,13 +14,11 @@ namespace Sisterly_v1
     {
         sisterlyDataContext sisterlyDataContext = new sisterlyDataContext();
 
-        public bool AcceptRequest(int projID,int  uID)
+        public bool AcceptRequest(int  ID)
         {
             bool good = false;
             var req = (from u in sisterlyDataContext.CollabRequests
-                       where u.UserID.Equals(uID) &&
-                        u.ProjectID.Equals(projID)
-                       select u).FirstOrDefault();
+                       where u.ID.Equals(ID) select u).FirstOrDefault();
 
             if(req != null)
             {
@@ -38,8 +36,8 @@ namespace Sisterly_v1
                 }
 
                 var collab = new Collaboration();
-                collab.UserID = uID;
-                collab.ProjectID = projID;
+                collab.UserID = req.UserID;
+                collab.ProjectID = req.ProjectID;
 
                 try
                 {
