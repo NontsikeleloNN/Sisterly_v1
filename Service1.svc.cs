@@ -16,6 +16,7 @@ namespace Sisterly_v1
 
         public bool AcceptRequest(int projID,int  uID)
         {
+            bool good = false;
             var req = (from u in sisterlyDataContext.CollabRequests
                        where u.UserID.Equals(uID) &&
                         u.ProjectID.Equals(projID)
@@ -24,6 +25,21 @@ namespace Sisterly_v1
             if(req != null)
             {
                 req.RequestStatus = "ACCEPTED";
+
+                try
+                {
+                    sisterlyDataContext.SubmitChanges();
+                    good = true;
+                }
+                catch (Exception e)
+                {
+                    e.GetBaseException();
+                    good = false;
+                }
+
+                var collab = new Collaboration();
+                collab.UserID = uID;
+                collab.ProjectID = projID;
 
                 try
                 {
@@ -44,10 +60,6 @@ namespace Sisterly_v1
 
         public bool CreatePost(int userID, string title, string image, int likes)
         {
-
-
-
-
             var post = new Post();
 
             var Likes = 0;
@@ -77,6 +89,28 @@ namespace Sisterly_v1
                 e.GetBaseException();
                 return false;
             }
+        }
+
+        public List<CollabRequest> GetCollabRequests(int id)
+        {
+            var collabsArr = new List<CollabRequest>();
+            dynamic myColls = (from p in sisterlyDataContext.CollabRequests
+                               where p.ProjectID.Equals(id)
+                               select p);
+
+            foreach(CollabRequest collabRequest in myColls)
+            {
+                CollabRequest temp = new CollabRequest
+                {
+                    ProjectID = collabRequest.ProjectID,
+                    UserID = collabRequest.UserID,
+
+                };
+
+                collabsArr.Add(temp);
+            }
+
+            return collabsArr;
         }
 
         public List<Project> GetFilteredProjects(string name)
@@ -207,7 +241,16 @@ namespace Sisterly_v1
             var user = (from u in sisterlyDataContext.RegUsers
                         where u.ID.Equals(id) 
                         select u).FirstOrDefault();
-            return user;    
+            return new RegUser
+            {
+                Email = user.Email,
+                UserName = user.UserName,
+                UserPassword = user.UserPassword,
+                Surname = user.Surname,
+                FieldOfStudy = user.FieldOfStudy,
+                IsMentor = user.IsMentor,
+                MentorDescription = user.MentorDescription,
+            };
         }
 
         public RegUser Login(string email, string password)
@@ -224,13 +267,18 @@ namespace Sisterly_v1
 
         public bool MakeRequest(int userid, int projectid)
         {
-            var requests = new CollabRequest
-            {
-                ProjectID = projectid,
-                UserID = userid,
-                RequestStatus = "0",
-                DateMade = DateTime.Now,
-            };
+            var requests = new CollabRequest();
+
+            var ProjectID = projectid;
+            var UserID = userid;
+           var RequestStatus = "0";
+            var DateMade = DateTime.Now;
+
+            requests.DateMade = DateMade;
+            requests.UserID = UserID;
+            requests.ProjectID = ProjectID;
+            requests.RequestStatus = RequestStatus;
+            
             sisterlyDataContext.CollabRequests.InsertOnSubmit(requests);
             try
             {
@@ -253,7 +301,7 @@ namespace Sisterly_v1
                 UserPassword = password,
                 Surname = surname,
                 FieldOfStudy = studyfield,
-                IsMentor = '1',
+                IsMentor = 'N',
                // MentorDescription = description
 
                 };

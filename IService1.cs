@@ -48,6 +48,8 @@ namespace Sisterly_v1
         [OperationContract]
         List<String> GetSkills(int id);
 
+        [OperationContract]
+        List<CollabRequest> GetCollabRequests(int id);
 
 
 
