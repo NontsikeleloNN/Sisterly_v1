@@ -1,0 +1,84 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="GirlCodeHackdb" Class="sisterlyDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="WebSettings" ConnectionString="Data Source=DESKTOP-DGKN6L9\SQLEXPRESS;Initial Catalog=GirlCodeHackdb;Integrated Security=True" SettingsObjectName="System.Configuration.ConfigurationManager.ConnectionStrings" SettingsPropertyName="GirlCodeHackdbConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Collaboration" Member="Collaborations">
+    <Type Name="Collaboration">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProjectID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Project_Collaboration" Member="Project" ThisKey="ProjectID" OtherKey="ID" Type="Project" IsForeignKey="true" />
+      <Association Name="RegUser_Collaboration" Member="RegUser" ThisKey="UserID" OtherKey="ID" Type="RegUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.CollabRequest" Member="CollabRequests">
+    <Type Name="CollabRequest">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="ProjectID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="UserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="RequestStatus" Type="System.String" DbType="VarChar(40) NOT NULL" CanBeNull="false" />
+      <Column Name="DateMade" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Association Name="Project_CollabRequest" Member="Project" ThisKey="ProjectID" OtherKey="ID" Type="Project" IsForeignKey="true" />
+      <Association Name="RegUser_CollabRequest" Member="RegUser" ThisKey="UserID" OtherKey="ID" Type="RegUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Post" Member="Posts">
+    <Type Name="Post">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="PostImage" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="Likes" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="RegUser_Post" Member="RegUser" ThisKey="UserID" OtherKey="ID" Type="RegUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Project" Member="Projects">
+    <Type Name="Project">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Title" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="TimeFrame" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="NumPeople" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="IsActive" Type="System.Byte" DbType="TinyInt NOT NULL" CanBeNull="false" />
+      <Column Name="ProjectDetails" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="ProjectImage" Type="System.String" DbType="VarChar(MAX) NOT NULL" CanBeNull="false" />
+      <Column Name="ProjectStatus" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="RATING" Type="System.Decimal" DbType="Decimal(18,0) NOT NULL" CanBeNull="false" />
+      <Column Name="MentorDescription" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="Project_Collaboration" Member="Collaborations" ThisKey="ID" OtherKey="ProjectID" Type="Collaboration" />
+      <Association Name="Project_CollabRequest" Member="CollabRequests" ThisKey="ID" OtherKey="ProjectID" Type="CollabRequest" />
+      <Association Name="RegUser_Project" Member="RegUser" ThisKey="UserID" OtherKey="ID" Type="RegUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.RegUser" Member="RegUsers">
+    <Type Name="RegUser">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Email" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="UserName" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="UserPassword" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="Surname" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Column Name="FieldOfStudy" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="IsMentor" Type="System.Char" DbType="Char(1) NOT NULL" CanBeNull="false" />
+      <Column Name="MentorDescription" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Association Name="RegUser_Collaboration" Member="Collaborations" ThisKey="ID" OtherKey="UserID" Type="Collaboration" />
+      <Association Name="RegUser_CollabRequest" Member="CollabRequests" ThisKey="ID" OtherKey="UserID" Type="CollabRequest" />
+      <Association Name="RegUser_Post" Member="Posts" ThisKey="ID" OtherKey="UserID" Type="Post" />
+      <Association Name="RegUser_Project" Member="Projects" ThisKey="ID" OtherKey="UserID" Type="Project" />
+      <Association Name="RegUser_SkillUser" Member="SkillUsers" ThisKey="ID" OtherKey="UserID" Type="SkillUser" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Skill" Member="Skills">
+    <Type Name="Skill">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="SkillName" Type="System.String" DbType="VarChar(255) NOT NULL" CanBeNull="false" />
+      <Association Name="Skill_SkillUser" Member="SkillUsers" ThisKey="ID" OtherKey="SkillID" Type="SkillUser" />
+    </Type>
+  </Table>
+  <Table Name="dbo.SkillUser" Member="SkillUsers">
+    <Type Name="SkillUser">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="UserID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="SkillID" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Association Name="Skill_SkillUser" Member="Skill" ThisKey="SkillID" OtherKey="ID" Type="Skill" IsForeignKey="true" />
+      <Association Name="RegUser_SkillUser" Member="RegUser" ThisKey="UserID" OtherKey="ID" Type="RegUser" IsForeignKey="true" />
+    </Type>
+  </Table>
+</Database>
