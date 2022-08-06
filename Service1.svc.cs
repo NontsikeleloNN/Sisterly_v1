@@ -14,7 +14,7 @@ namespace Sisterly_v1
     {
         sisterlyDataContext sisterlyDataContext = new sisterlyDataContext();
 
-        public bool acceptRequest(int projID,int  uID)
+        public bool AcceptRequest(int projID,int  uID)
         {
             var req = (from u in sisterlyDataContext.CollabRequests
                        where u.UserID.Equals(uID) &&
@@ -42,25 +42,40 @@ namespace Sisterly_v1
 
         }
 
-        public Post createPost(int userID, string title, string image, int likes)
+        public bool CreatePost(int userID, string title, string image, int likes)
         {
-            var post = new Post
-            {
-                Likes = likes,
-                Title = title,
-                PostImage = image,  
-                UserID = userID,
-            };
+
+
+
+
+            var post = new Post();
+
+            var Likes = 0;
+            var Title = "";
+            var PostImage = "";
+            var UserID = 0;
+
+
+            Likes = likes;
+            Title = title;
+            PostImage = image;
+            UserID = userID;
+
+            post.UserID = UserID;
+            post.Title = Title; 
+            post.PostImage = PostImage;
+            post.Likes = Likes;
+
             sisterlyDataContext.Posts.InsertOnSubmit(post);
             try
             {
                 sisterlyDataContext.SubmitChanges();
-                return post;
+                return true;
             }
             catch (Exception e)
             {
                 e.GetBaseException();
-                return null;
+                return false;
             }
         }
 
@@ -72,9 +87,23 @@ namespace Sisterly_v1
                                   where p.Title.Contains(name)
                                   select p);
 
-            foreach(Project p in myprojects)
+            foreach(Project project in myprojects)
             {
-                projects.Add(p);
+                Project temp= new  Project
+                {
+                    ID = project.ID,
+                    Title = project.Title,
+                    TimeFrame = project.TimeFrame,
+                    NumPeople = project.NumPeople,
+                    IsActive = project.IsActive,
+                    ProjectDetails = project.ProjectDetails,
+                    ProjectImage = project.ProjectImage,
+                    ProjectStatus = project.ProjectStatus,
+                    RATING = project.RATING,
+                    MentorDescription = "Nothing",
+                };
+
+                projects.Add(temp);
             }
 
             return projects;
@@ -88,7 +117,15 @@ namespace Sisterly_v1
 
             foreach(Post p in myposts)
             {
-                posts.Add(p);
+                Post post = new Post
+                {
+                    UserID = p.UserID,
+                    Title = p.Title,
+                    PostImage = p.PostImage,
+                    Likes = p.Likes,
+                };
+
+                posts.Add(post);
             }
 
             return posts;
@@ -98,19 +135,47 @@ namespace Sisterly_v1
         {
             var project = (from p in sisterlyDataContext.Projects
                            where p.ID == id
-                           select p).FirstOrDefault();  
-            return project;         
+                           select p).FirstOrDefault();
+            return new Project
+            {
+                ID = id,
+                Title = project.Title,
+                TimeFrame = project.TimeFrame,
+                NumPeople = project.NumPeople,
+                IsActive = project.IsActive,
+                ProjectDetails = project.ProjectDetails,
+                ProjectImage = project.ProjectImage,
+                ProjectStatus = project.ProjectStatus,
+                RATING = project.RATING,
+                MentorDescription = "Nothing",
+            };
+
+           
         }
 
         public List<Project> GetProjects()
         {
             var posts = new List<Project>();
-            dynamic myposts = (from p in sisterlyDataContext.Projects
+            dynamic projects = (from p in sisterlyDataContext.Projects
                                select p);
 
-            foreach (Project p in myposts)
+            foreach (Project project in projects)
             {
-                posts.Add(p);
+                Project temp = new Project
+                {
+                    ID = project.ID,
+                    Title = project.Title,
+                    TimeFrame = project.TimeFrame,
+                    NumPeople = project.NumPeople,
+                    IsActive = project.IsActive,
+                    ProjectDetails = project.ProjectDetails,
+                    ProjectImage = project.ProjectImage,
+                    ProjectStatus = project.ProjectStatus,
+                    RATING = project.RATING,
+                    MentorDescription = "Nothing",
+                };
+
+                posts.Add(temp);
             }
 
             return posts;
@@ -137,7 +202,7 @@ namespace Sisterly_v1
 
         }
 
-        public RegUser getUser(int id)
+        public RegUser GetUser(int id)
         {
             var user = (from u in sisterlyDataContext.RegUsers
                         where u.ID.Equals(id) 
@@ -145,7 +210,7 @@ namespace Sisterly_v1
             return user;    
         }
 
-        public RegUser login(string email, string password)
+        public RegUser Login(string email, string password)
         {
            
              var webuser = (from u in sisterlyDataContext.RegUsers
@@ -157,7 +222,7 @@ namespace Sisterly_v1
        
         }
 
-        public bool makeRequest(int userid, int projectid)
+        public bool MakeRequest(int userid, int projectid)
         {
             var requests = new CollabRequest
             {
@@ -205,7 +270,7 @@ namespace Sisterly_v1
             }
         }
         /* if the skill is registered succesfully, register a new skilluser, if that is fine as well return true else return false**/
-        public bool regSkill(string name, int userid)
+        public bool RegSkill(string name, int userid)
         {
             bool isReg = false;
             var skill = new Skill

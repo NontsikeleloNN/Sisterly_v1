@@ -22,28 +22,28 @@ namespace Sisterly_v1
         Project GetProject(int id);
 
         [OperationContract]
-        RegUser login(string email, string name);
+        RegUser Login(string email, string password);
 
         [OperationContract]
         bool Register(string email, string name, string password, string surname, string studyfield, char isMentor, string description);
 
         [OperationContract]
-        bool regSkill(string name, int userID);
+        bool RegSkill(string name, int userID);
 
         [OperationContract]
-        bool makeRequest(int userid, int projectid);
+        bool MakeRequest(int userid, int projectid);
 
         [OperationContract]
-        bool acceptRequest(int reqID, int user);
+        bool AcceptRequest(int reqID, int user);
 
         [OperationContract]
-        Post createPost(int userID, string title, string image, int likes);
+        bool CreatePost(int userID, string title, string image, int likes);
 
         [OperationContract]
         List<Post> GetPosts();
 
         [OperationContract]
-        RegUser getUser(int id);
+        RegUser GetUser(int id);
 
         [OperationContract]
         List<String> GetSkills(int id);
